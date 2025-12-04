@@ -1,0 +1,10 @@
+
+# STA322 Project 1
+## Abby Li and Austin Huang
+
+```{r}
+helicopter <- read.csv("project2-finaldata.csv")
+
+# check that the data is consistent with averages calculatd on sheets
+```
+
