@@ -2,6 +2,11 @@
 # STA322 Project 1
 ## Abby Li and Austin Huang
 
+```{r, message=FALSE, warning=FALSE}
+library(tidyr)
+library(dplyr)
+```
+
 ```{r}
 helicopter <- read.csv("project2-finaldata.csv")
 
@@ -17,14 +22,51 @@ mean_check <- aggregate(flight_time ~ trt, data = helicopter, FUN = mean)
 ### Which factors seem to be most important for making helicopters that fly longer?
 
 ```{r}
+boxplot(flight_time ~ trt, data=helicopter, xlab="Treatment", ylab="Flight Time")
 
+model = lm(flight_time ~ rotor_length + leg_width + leg_length + paper_clip, data=helicopter)
+boxplot(model$residual~helicopter$trt, xlab = "Treatment", ylab = "Residuals")
+abline(0,0)
+summary(model)
 ```
+In the regular model with no interactions, the residuals deviate significantly from the 0 line, indicating that this model is a poor fit for the data.
+
+```{r}
+regfactexpwinteract = lm(flight_time ~ rotor_length * leg_width * leg_length * paper_clip, data = helicopter)
+boxplot(regfactexpwinteract$residual~helicopter$trt, xlab = "Treatment", ylab = "Residuals")
+abline(0,0)
+
+summary(regfactexpwinteract)
+```
+In the model with interactions, the residuals are much closer to 0, indicating that this model is a much better fit for the data. The only significant deviation from 0 is treatment ab, where there is a large negative outlier.
+
+In our model summary, we see that all individual factor effects seem to decrease flight time, with rotor_length being the most significant decrease with an estimate of -1.1075 seconds in flight time. However, interestingly, we see that combinations of factors seems to lessen the flight time decrease effect of adding individual treatments, with all positive two-way interactions terms. The p-values for the interactions terms for rotor_length:leg_width, rotor_length:leg_length, and rotor_length:paper_clip are less than 0.05, so there is evidence for these interaction effects.
+
 
 ### Is there any evidence that the effect of rotor length differs by leg width?
 
 ```{r}
+coef_est = coef(regfactexpwinteract)
+ci = confint(regfactexpwinteract)
 
+# Rotor effect when leg width = LOW
+tau_low  <- coef_est["rotor_length"]
+ci_low   <- ci["rotor_length", ]
+
+# Rotor effect when leg width = HIGH
+tau_high <- coef_est["rotor_length"] + coef_est["rotor_length:leg_width"]
+ci_high <- ci["rotor_length", ] + ci["rotor_length:leg_width", ]
+
+tau_table <- data.frame(
+  Leg_Width = c("Low", "High"),
+  Tau_Estimate = c(tau_low, tau_high),
+  CI_Lower = c(ci_low[1], ci_high[1]),
+  CI_Upper = c(ci_low[2], ci_high[2])
+)
+
+tau_table
 ```
+There is significant evidence that the effect of rotor length differs by leg width. In the above model, we have an estimate of 0.88 and p = 0.00109 for the interaction term rotor_length:leg_width. When the leg width is small, increasing the rotor length changes mean flight time by about -1.1075 seconds (95% CI: -1.4672 to -0.7477). When the leg width is large, increasing the rotor length changes mean flight time by about -0.2275 seconds (95% CI: -1.0961 to 0.6410683). The difference in flight time change indicates a significant interaction effect, where the effect of increasing rotor length depends on leg width.
 
 
 ### What would you recommend as the ideal combination to make the helicopter fly long?
