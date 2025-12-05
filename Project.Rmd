@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 
 # STA322 Project 1
 ## Abby Li and Austin Huang
@@ -16,7 +21,9 @@ mean_check <- aggregate(flight_time ~ trt, data = helicopter, FUN = mean)
 
 ### Description of Study Design
 
+![](paper-helicopters.png){width=60%}
 
+![](helicopter-factors.png){width=60%}
 
 ### Questions:
 ### Which factors seem to be most important for making helicopters that fly longer?
