@@ -83,12 +83,12 @@ tau_table <- data.frame(
 
 tau_table
 ```
-There is significant evidence that the effect of rotor length differs by leg width. In the above model, we have an estimate of 0.88 and p = 0.00109 for the interaction term rotor_length:leg_width. When the leg width is small, increasing the rotor length changes mean flight time by about -1.1075 seconds (95% CI: -1.4672 to -0.7477). When the leg width is large, increasing the rotor length changes mean flight time by about -0.2275 seconds (95% CI: -1.0961 to 0.6410683). The difference in flight time change indicates a significant interaction effect, where the effect of increasing rotor length depends on leg width.
 
+There is significant evidence that the effect of rotor length differs by leg width. In the above model, we have an estimate of 0.88 and p = 0.00109 for the interaction term rotor_length:leg_width, indicating the effect of rotor length changes depending on leg width. When the leg width is small, increasing the rotor length from 7.5 to 8.5 cm reduces mean flight time by about 1.11 seconds (95% CI: -1.4672 to -0.7477). Since the 95% CI does not include 0, this effect is significant. When the leg width is large, increasing the rotor length reduces mean flight time by about 0.23 seconds (95% CI: -1.0961 to 0.6410683). Since the 95% CI does include 0, the effect is not significant.
+
+Overall, there is strong evidence that the effect of rotor length differs by leg width. Since interaction effect is significant and the confidence intervals differ in magnitude, the effect of increasing rotor length depends on leg width.
 
 ### What would you recommend as the ideal combination to make the helicopter fly long?
 
-```{r}
-
-```
+For the ideal combination to make a helicopter fly, we would recommend 
 
