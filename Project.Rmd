@@ -90,5 +90,7 @@ Overall, there is strong evidence that the effect of rotor length differs by leg
 
 ### What would you recommend as the ideal combination to make the helicopter fly long?
 
-For the ideal combination to make a helicopter fly, we would recommend 
+Based on the full factorial model highlighted above, for the ideal combination to make a helicopter fly, we would recommend having a helicopter with a shorter rotor (7.5 cm), narrower legs (3.2 cm), shorter leg length (7.5 cm), and no paper clip. All these factors have negative main effects, indicating that higher levels (longer rotor, wider leg, longer leg, paper clip) decrease flight time. Although several interaction effects involving rotor length that are significant (see q1), these effects aren't sufficient enough in improving flight time compared to the baseline negative main effects. For example, the rotor_length x leg_length interaction effect is significant with a coefficient of 1.27. When legs are short, increasing rotor length reduces flight time by -1.1 seconds, and when legs are long, increasing rotor length increases flight time by 0.16 seconds (-1.1 + 1.27). However, even though this interaction is significant, the baseline design of short rotor and short legs will still have higher and better flight time overall. 
+
+Thus, the most ideal combination to make the helicopter fly longer is for the four factors to be at their low levels (short rotor, narrow leg, short leg, no paper clip).
 
