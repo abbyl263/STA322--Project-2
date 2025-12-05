@@ -21,6 +21,8 @@ mean_check <- aggregate(flight_time ~ trt, data = helicopter, FUN = mean)
 
 ### Description of Study Design
 
+We chose to do a full 2^4 factorial experiment to examine how four factors- rotor length, leg length, leg width, and paper clip presence- affect flight time. Each factor has two levels (high and low) for a total of 16 helicopter designs (see photo for the 8 designs without paper clips). Specific helicopter factors are listed in table 1. Each helicopter was flown 4 times for a total of 64 randomized trials. We randomized the trials beforehand to reduce any bias from certain treatment combinations to ensure that the differences we observed in timing were due to the helicopters themselves and not other testing conditions. We chose to do a full factorial design to investigate the main effects and interaction effects without having to worry about aliasing, which is an issue that arises with a half factorial design. 
+
 ![](paper-helicopters.png){width=60%}
 
 ![](helicopter-factors.png){width=60%}
@@ -36,7 +38,10 @@ boxplot(model$residual~helicopter$trt, xlab = "Treatment", ylab = "Residuals")
 abline(0,0)
 summary(model)
 ```
-In the regular model with no interactions, the residuals deviate significantly from the 0 line, indicating that this model is a poor fit for the data.
+
+In the regular model with no interactions, the residuals deviate significantly from the 0 line, indicating that this model is a poor fit for the data. 
+
+The presence of a paper clip is the only statistically significant factor (p=0.006), while rotor length, leg length, and leg width are not statistically significant. Thus, for the main effects model, the presence of a paper clip has the strongest effect on flight time and is the most important factor for making helicopters that fly longer.
 
 ```{r}
 regfactexpwinteract = lm(flight_time ~ rotor_length * leg_width * leg_length * paper_clip, data = helicopter)
@@ -44,11 +49,16 @@ boxplot(regfactexpwinteract$residual~helicopter$trt, xlab = "Treatment", ylab = 
 abline(0,0)
 
 summary(regfactexpwinteract)
+
+# conf int for rotor_length and paper_clip
+confint(regfactexpwinteract)["rotor_length", ]
+confint(regfactexpwinteract)["paper_clip",]
 ```
+
 In the model with interactions, the residuals are much closer to 0, indicating that this model is a much better fit for the data. The only significant deviation from 0 is treatment ab, where there is a large negative outlier.
 
-In our model summary, we see that all individual factor effects seem to decrease flight time, with rotor_length being the most significant decrease with an estimate of -1.1075 seconds in flight time. However, interestingly, we see that combinations of factors seems to lessen the flight time decrease effect of adding individual treatments, with all positive two-way interactions terms. The p-values for the interactions terms for rotor_length:leg_width, rotor_length:leg_length, and rotor_length:paper_clip are less than 0.05, so there is evidence for these interaction effects.
-
+In our model summary, we see that all individual main effects seem to decrease flight time when increasing factors from their low to high level, with rotor_length having the most significant effect, followed by the presence of a paper clip. Specifically, the estimated effect of rotor length is -1.1 seconds, so on average, helicopters with longer rotors fly 1.1 seconds less than helicopters with shorter rotors, holding other variables constant (95% CI = [-1.47, -0.75]). The estimated effect of paper clip is -0.49 seconds, so on average, helicopters with paper clips fly -0.49 seconds less than helicopters without paper clips, holding other variables constant (95% CI = [-0.85, -0.13]). 
+However, interestingly, we see that combinations of certain factors modify, and in some cases, lessen the flight time decrease effect from individual factors. For example, the positive two-way interaction terms including rotor_length:leg_width, rotor_length:leg_length, and rotor_length:paper_clip are less than 0.05, so there is evidence that the effect of rotor length depends on levels of leg width, leg length, and paper clip. 
 
 ### Is there any evidence that the effect of rotor length differs by leg width?
 
@@ -56,11 +66,11 @@ In our model summary, we see that all individual factor effects seem to decrease
 coef_est = coef(regfactexpwinteract)
 ci = confint(regfactexpwinteract)
 
-# Rotor effect when leg width = LOW
+# rotor effect when leg width = LOW
 tau_low  <- coef_est["rotor_length"]
 ci_low   <- ci["rotor_length", ]
 
-# Rotor effect when leg width = HIGH
+# rotor effect when leg width = HIGH
 tau_high <- coef_est["rotor_length"] + coef_est["rotor_length:leg_width"]
 ci_high <- ci["rotor_length", ] + ci["rotor_length:leg_width", ]
 
