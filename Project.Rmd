@@ -89,8 +89,54 @@ There is significant evidence that the effect of rotor length differs by leg wid
 Overall, there is strong evidence that the effect of rotor length differs by leg width. Since interaction effect is significant and the confidence intervals differ in magnitude, the effect of increasing rotor length depends on leg width.
 
 ### What would you recommend as the ideal combination to make the helicopter fly long?
-
 Based on the full factorial model highlighted above, for the ideal combination to make a helicopter fly, we would recommend having a helicopter with a shorter rotor (7.5 cm), narrower legs (3.2 cm), shorter leg length (7.5 cm), and no paper clip. All these factors have negative main effects, indicating that higher levels (longer rotor, wider leg, longer leg, paper clip) decrease flight time. Although several interaction effects involving rotor length that are significant (see q1), these effects aren't sufficient enough in improving flight time compared to the baseline negative main effects. For example, the rotor_length x leg_length interaction effect is significant with a coefficient of 1.27. When legs are short, increasing rotor length reduces flight time by -1.1 seconds, and when legs are long, increasing rotor length increases flight time by 0.16 seconds (-1.1 + 1.27). However, even though this interaction is significant, the baseline design of short rotor and short legs will still have higher and better flight time overall. 
 
 Thus, the most ideal combination to make the helicopter fly longer is for the four factors to be at their low levels (short rotor, narrow leg, short leg, no paper clip).
 
+
+
+## Appendix
+
+This is the code for releveling to get the 95% CI for the other 15 helicopter designs. 
+```{r}
+helicopter$rotor_length_low = 1 - helicopter$rotor_length
+helicopter$leg_length_low = 1 - helicopter$leg_length
+helicopter$leg_width_low = 1 - helicopter$leg_width
+helicopter$paper_clip_low = 1 - helicopter$paper_clip
+
+# the variables after regfactexpwinteract represent the helicopter with the mentioned treatments are the baseline
+regfactexpwinteract_a = lm(flight_time ~ rotor_length_low * leg_length * leg_width * paper_clip, data = helicopter)
+regfactexpwinteract_b = lm(flight_time ~ rotor_length * leg_length_low * leg_width * paper_clip, data = helicopter)
+regfactexpwinteract_c = lm(flight_time ~ rotor_length * leg_length * leg_width_low * paper_clip, data = helicopter)
+regfactexpwinteract_d = lm(flight_time ~ rotor_length * leg_length * leg_width * paper_clip_low, data = helicopter)
+regfactexpwinteract_ab = lm(flight_time ~ rotor_length_low * leg_length_low * leg_width * paper_clip, data = helicopter)
+regfactexpwinteract_ac = lm(flight_time ~ rotor_length_low * leg_length * leg_width_low * paper_clip, data = helicopter)
+regfactexpwinteract_ad = lm(flight_time ~ rotor_length_low * leg_length * leg_width * paper_clip_low, data = helicopter)
+regfactexpwinteract_bc = lm(flight_time ~ rotor_length * leg_length_low * leg_width_low * paper_clip, data = helicopter)
+regfactexpwinteract_bd = lm(flight_time ~ rotor_length * leg_length_low * leg_width_low * paper_clip, data = helicopter)
+regfactexpwinteract_cd = lm(flight_time ~ rotor_length * leg_length * leg_width_low * paper_clip_low, data = helicopter)
+regfactexpwinteract_abc = lm(flight_time ~ rotor_length_low * leg_length_low * leg_width_low * paper_clip, data = helicopter)
+regfactexpwinteract_abd = lm(flight_time ~ rotor_length_low * leg_length_low * leg_width * paper_clip_low, data = helicopter)
+regfactexpwinteract_acd = lm(flight_time ~ rotor_length_low * leg_length * leg_width_low * paper_clip_low, data = helicopter)
+regfactexpwinteract_bcd = lm(flight_time ~ rotor_length * leg_length_low * leg_width_low * paper_clip_low, data = helicopter)
+regfactexpwinteract_abcd = lm(flight_time ~ rotor_length_low * leg_length_low * leg_width_low * paper_clip_low, data = helicopter)
+
+cat("95% Confidence Interval for the baseline helicopter configuration (all treatments at low levels):\n")
+confint(regfactexpwinteract)["(Intercept)",]
+cat("95% Confidence Intervals for other helicopter treatments:\n")
+confint(regfactexpwinteract_a)["(Intercept)",]
+confint(regfactexpwinteract_b)["(Intercept)",]
+confint(regfactexpwinteract_c)["(Intercept)",]
+confint(regfactexpwinteract_d)["(Intercept)",]
+confint(regfactexpwinteract_ab)["(Intercept)",]
+confint(regfactexpwinteract_ac)["(Intercept)",]
+confint(regfactexpwinteract_ad)["(Intercept)",]
+confint(regfactexpwinteract_bc)["(Intercept)",]
+confint(regfactexpwinteract_bd)["(Intercept)",]
+confint(regfactexpwinteract_cd)["(Intercept)",]
+confint(regfactexpwinteract_abc)["(Intercept)",]
+confint(regfactexpwinteract_abd)["(Intercept)",]
+confint(regfactexpwinteract_acd)["(Intercept)",]
+confint(regfactexpwinteract_bcd)["(Intercept)",]
+confint(regfactexpwinteract_abcd)["(Intercept)",]
+```
