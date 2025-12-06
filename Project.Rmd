@@ -55,10 +55,15 @@ confint(regfactexpwinteract)["rotor_length", ]
 confint(regfactexpwinteract)["paper_clip",]
 ```
 
+```{r}
+anova(model, regfactexpwinteract)
+```
+
 In the model with interactions, the residuals are much closer to 0, indicating that this model is a much better fit for the data. The only significant deviation from 0 is treatment ab, where there is a large negative outlier.
 
 In our model summary, we see that all individual main effects seem to decrease flight time when increasing factors from their low to high level, with rotor_length having the most significant effect, followed by the presence of a paper clip. Specifically, the estimated effect of rotor length is -1.1 seconds, so on average, helicopters with longer rotors fly 1.1 seconds less than helicopters with shorter rotors, holding other variables constant (95% CI = [-1.47, -0.75]). The estimated effect of paper clip is -0.49 seconds, so on average, helicopters with paper clips fly -0.49 seconds less than helicopters without paper clips, holding other variables constant (95% CI = [-0.85, -0.13]). 
 However, interestingly, we see that combinations of certain factors modify, and in some cases, lessen the flight time decrease effect from individual factors. For example, the positive two-way interaction terms including rotor_length:leg_width, rotor_length:leg_length, and rotor_length:paper_clip are less than 0.05, so there is evidence that the effect of rotor length depends on levels of leg width, leg length, and paper clip. 
+Furthermore, the ANOVA test tells us that adding interaction effects does significantly improve the model. 
 
 ### Is there any evidence that the effect of rotor length differs by leg width?
 
